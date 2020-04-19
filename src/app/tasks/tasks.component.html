@@ -1,44 +1,64 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-10 mx-auto">
-      <div class="md-form">
-        <input type="text"
-               [(ngModel)]="searchText"
-               class="form-control "
-               id="search"
-               mdbInput/>
-        <label for="search">Search</label>
+<div class="col-12 pl-0 pr-0 mt-5">
+  <div class="card">
+    <div class="card-header bg-secondary">
+      <div class="row">
+        <div class="col-6">
+          <h3 class="card-title text-white">My Tasks</h3>
+        </div>
+        <div class="col-6">
+          <div class="float-right">
+            <button type="button"
+                    class="btn btn-outline-light d-flex justify-content-center align-content-between"
+                    (click)="addTask(content)" matRipple>
+              <i class="material-icons mr-1">playlist_add</i><span>New Task</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body table-responsive mb-4 mat-paginator">
+      <div class="mat-elevation-z8">
+        <div *ngIf="isLoadingResults" class="loading-shade">
+          <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+        </div>
+        <mat-paginator [length]="page?.totalElements"
+                       [pageSizeOptions]="[5, 10, 20]"
+                       showFirstLastButtons></mat-paginator>
+        <table [dataSource]="dataSource"
+               class="table table-hover" mat-table>
+
+          <ng-container matColumnDef="id">
+            <th *matHeaderCellDef mat-header-cell>Id</th>
+            <td *matCellDef="let element" mat-cell>{{element.id}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="completeBy">
+            <th scope="col" *matHeaderCellDef mat-header-cell>Due By</th>
+            <td *matCellDef="let element" mat-cell>{{element.completeBy | date}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th scope="col" *matHeaderCellDef mat-header-cell>Status</th>
+            <td (click)="flipStatus(element)" *matCellDef="let element" mat-cell matRipple>
+              <mat-icon [class]="element.status == 'pending'? 'text-warning': 'text-success'">
+                {{element.status == 'pending' ? 'hourglass_empty' : 'done'}}
+              </mat-icon>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="title">
+            <th class="text-center" scope="col" *matHeaderCellDef mat-header-cell>Title</th>
+            <td (click)="showTask(element)" *matCellDef="let element" mat-cell matRipple>{{element.title}}</td>
+          </ng-container>
+
+          <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+          <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+        </table>
       </div>
     </div>
   </div>
-  <table mdbTable #tableEl="mdbTable" class="z-depth-1">
-    <thead>
-    <tr>
-      <th *ngFor="let head of headElements; let i = index"
-          aria-controls="tableSortExample"
-          scope="col" [mdbTableSort]="elements" [sortBy]="headElements[i]">
-        {{head | titlecase}}
-        <mdb-icon fas icon="sort"></mdb-icon>
-      </th>
-<!--      <th *ngFor="let head of headElements; let i = index" scope="col">{{head}}</th>-->
-
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let el of elements; let i = index">
-      <th *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"
-          scope="row">{{el.id}}</th>
-      <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">{{el.title}}</td>
-      <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">{{el.status}}</td>
-      <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">{{el.completeBy}}</td>
-    </tr>
-    </tbody>
-    <tfoot class="grey lighten-5 w-100">
-    <tr>
-      <td colspan="4">
-        <mdb-table-pagination [tableEl]="tableEl" [searchDataSource]="elements"></mdb-table-pagination>
-      </td>
-    </tr>
-    </tfoot>
-  </table>
 </div>
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <app-task (exit)="c()"></app-task>
+</ng-template>

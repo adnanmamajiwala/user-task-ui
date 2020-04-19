@@ -16,7 +16,7 @@ export class TasksService {
 
   retrieveAll(pageIndex: number, pageSize: number): Observable<Pageable<Task>> {
     return this.httpClient
-      .get<Pageable<Task>>(`${environment.api_base_url}/task`)
+      .get<Pageable<Task>>(`${environment.api_base_url}/task?page=${pageIndex}&size=${pageSize}`)
       .pipe(catchError(err => this.handleError(err, 'retrieveAll')));
   }
 

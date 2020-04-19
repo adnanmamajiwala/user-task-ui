@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-task',
@@ -7,9 +7,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TaskComponent implements OnInit {
 
-  constructor() { }
+  @Output() exit = new EventEmitter<string>();
+
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
 
+  onClose(crossClick: string) {
+    this.exit.emit(crossClick);
+  }
+
+  onSave(saveClick: string) {
+    this.exit.emit(saveClick);
+  }
 }

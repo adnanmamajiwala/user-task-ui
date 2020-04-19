@@ -1,65 +1,67 @@
-import {AfterViewInit, ChangeDetectorRef, Component, HostListener, OnInit, ViewChild} from '@angular/core';
-import {MdbTableDirective, MdbTablePaginationComponent} from 'angular-bootstrap-md';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {TasksService} from './tasks.service';
+import {Page, Pageable} from '../shared/pageable.model';
 import {Task} from './task/task.model';
+import {MatPaginator} from '@angular/material/paginator';
+import {startWith, switchMap} from 'rxjs/operators';
+import {MatTableDataSource} from '@angular/material/table';
+import {NgbModal, NgbModalConfig} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-tasks',
   templateUrl: './tasks.component.html',
   styleUrls: ['./tasks.component.css']
 })
-export class TasksComponent implements OnInit, AfterViewInit {
+export class TasksComponent implements OnInit {
 
-  @ViewChild(MdbTablePaginationComponent, {static: true}) mdbTablePagination: MdbTablePaginationComponent;
-  @ViewChild(MdbTableDirective, {static: true}) mdbTable: MdbTableDirective;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
-  elements: Array<Task> = [];
-  previous: Array<Task> = [];
-  headElements = ['id', 'title', 'status', 'completeBy'];
-  searchText = '';
+  dataSource = new MatTableDataSource<Task>();
+  displayedColumns: Array<string> = ['id', 'completeBy', 'status', 'title'];
+  page: Page;
+  isLoadingResults = false;
+  task: Task;
 
   constructor(private tasksService: TasksService,
+              private config: NgbModalConfig,
+              private modalService: NgbModal,
               private cdRef: ChangeDetectorRef) {
+    config.backdrop = 'static';
+    config.keyboard = false;
   }
 
   ngOnInit() {
 
-    this.tasksService.retrieveAll(0, 0)
-      .subscribe(value => {
-        this.elements = value.content;
-        console.log(this.elements);
-        this.mdbTable.setDataSource(this.elements);
-        this.elements = this.mdbTable.getDataSource();
-        this.previous = this.mdbTable.getDataSource();
-        this.mdbTablePagination.setMaxVisibleItemsNumberTo(10);
-        this.mdbTablePagination.calculateFirstItemIndex();
-        this.mdbTablePagination.calculateLastItemIndex();
-        this.cdRef.detectChanges();
+    this.paginator.pageIndex = 0;
+    this.paginator.pageSize = 5;
+    this.paginator.page
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.isLoadingResults = true;
+          return this.tasksService.retrieveAll(this.paginator.pageIndex, this.paginator.pageSize);
+        }))
+      .subscribe(data => {
+        setTimeout(() => {
+          this.dataSource.data = data.content;
+          this.page = data.page;
+          this.isLoadingResults = false;
+          this.cdRef.detectChanges();
+        }, 1500);
       });
+
   }
 
-  ngAfterViewInit() {
-    this.mdbTablePagination.setMaxVisibleItemsNumberTo(10);
-
-    this.mdbTablePagination.calculateFirstItemIndex();
-    this.mdbTablePagination.calculateLastItemIndex();
-    this.cdRef.detectChanges();
+  addTask(content) {
+    // TODO: Add task code
+    this.modalService.open(content);
   }
 
-  @HostListener('input')
-  oninput() {
-    this.searchItems();
+  showTask(element: Task) {
+    // TODO:: Show task modal
   }
 
-  searchItems() {
-    const prev = this.mdbTable.getDataSource();
-    if (!this.searchText) {
-      this.mdbTable.setDataSource(this.previous);
-      this.elements = this.mdbTable.getDataSource();
-    }
-    if (this.searchText) {
-      this.elements = this.mdbTable.searchLocalDataByMultipleFields(this.searchText, ['first', 'last']);
-      this.mdbTable.setDataSource(prev);
-    }
+  flipStatus(element: Task) {
+
   }
 }
