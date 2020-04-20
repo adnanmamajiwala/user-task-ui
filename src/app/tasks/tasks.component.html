@@ -3,7 +3,7 @@
     <div class="card-header bg-primary">
       <div class="row">
         <div class="col-6">
-          <h3 class="card-title text-white">My Tasks</h3>
+          <h3 class="card-title text-white">Task Manager</h3>
         </div>
         <div class="col-6">
           <div class="float-right btn-group">
@@ -32,7 +32,6 @@
                        showFirstLastButtons></mat-paginator>
         <table [dataSource]="dataSource"
                class="table table-hover" mat-table>
-
           <ng-container matColumnDef="id">
             <th *matHeaderCellDef mat-header-cell>Id</th>
             <td (click)="showTask(element)" *matCellDef="let element" mat-cell>{{element.id}}</td>
@@ -45,8 +44,9 @@
 
           <ng-container matColumnDef="status">
             <th class="p-12" *matHeaderCellDef mat-header-cell>Status</th>
-            <td  *matCellDef="let element" mat-cell>
-              <button (click)="flipStatus(element)"
+            <td *matCellDef="let element" mat-cell>
+              <button *ngIf="!!element.id"
+                      (click)="flipStatus(element)"
                       [class]="getButtonClass(element)"
                       class="btn btn-circle btn-circle-sm m-1">
                 <i class="fa" [class]="getIconClass(element)"></i>
@@ -62,6 +62,9 @@
           <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
           <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
         </table>
+        <div *ngIf="!!dataSource?.data[0] && !dataSource?.data[0].id" class="text-center pb-2">
+          <h4>No records found</h4>
+        </div>
       </div>
     </div>
   </div>

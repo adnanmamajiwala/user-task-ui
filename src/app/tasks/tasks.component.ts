@@ -80,28 +80,30 @@ export class TasksComponent implements OnInit {
 
   getButtonClass(element: Task): string {
     if (element.status === 'completed') {
-      return 'btn-success';
+      return 'btn-outline-success';
     }
     if (this.today > element.completeBy) {
-      return 'btn-danger';
+      return 'btn-outline-danger';
     } else if (this.today === element.completeBy) {
-      return 'btn-warning';
+      return 'btn-outline-warning';
     } else if (this.tomorrow === element.completeBy) {
-      return 'btn-info';
+      return 'btn-outline-info';
     }
     return 'btn-outline-info';
   }
 
   getIconClass(element: Task): string {
-    if (element.status === 'completed') {
-      return 'fa-check';
-    }
-    if (this.today > element.completeBy) {
-      return 'fa-exclamation-triangle';
-    }else if (this.today === element.completeBy) {
-      return 'fa-exclamation';
+    if (!element.id) {
+      console.log('inside empty', element);
+      return '';
+    } else if (element.status === 'completed') {
+      return 'fa-check-circle';
+    } else if (this.today > element.completeBy) {
+      return 'fa-exclamation-circle';
+    } else if (this.today === element.completeBy) {
+      return 'fa-exclamation-circle';
     } else if (this.tomorrow === element.completeBy) {
-      return 'fa-clock';
+      return 'fa-exclamation-circle';
     }
     return 'fa-ellipsis-h';
   }

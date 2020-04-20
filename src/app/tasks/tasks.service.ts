@@ -118,4 +118,16 @@ export class TasksService {
         catchError(err => this.handleError(err, 'retrieveByStatusAndCompleteBy'))
       );
   }
+
+  retrieveAllPending(date: string) {
+    return this.httpClient
+      .get<Pageable<Task>>(`${environment.api_base_url}/task/search/statusEqualsAndCompleteByBefore?completeBy=${date}&status=pending`)
+      .pipe(
+        map(value => {
+          this.updateTaskSubject(value.content);
+          return value;
+        }),
+        catchError(err => this.handleError(err, 'retrieveAllPending'))
+      );
+  }
 }

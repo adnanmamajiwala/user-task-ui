@@ -13,6 +13,7 @@ import {debounceTime, distinctUntilChanged, filter, switchMap} from 'rxjs/operat
 export class FilterComponent implements OnInit {
 
   searchInput: FormControl = new FormControl();
+  searchPill = '';
 
   constructor(private tasksService: TasksService) {
   }
@@ -24,20 +25,43 @@ export class FilterComponent implements OnInit {
       filter(term => {
         return term.length >= 3;
       }),
-      switchMap((value) => this.tasksService.retrieveByTitle(value))
+      switchMap((value) => {
+        this.searchPill = value;
+        return this.tasksService.retrieveByTitle(value);
+      })
     ).subscribe();
   }
 
   searchByStatus(status: string) {
     this.tasksService
       .retrieveByStatus(status)
-      .subscribe();
+      .subscribe(value => {
+        this.searchPill = status === 'pending' ? 'Pending' : 'Completed';
+      });
   }
 
-  searchByCompleteBy(day: string) {
+  searchByCompleteBy(day: string, pillText: string) {
     const date = day === 'today' ? moment().format('YYYY-MM-DD') : moment().add(1, 'day').format('YYYY-MM-DD');
     this.tasksService
       .retrieveByStatusAndCompleteBy('pending', date)
-      .subscribe();
+      .subscribe(value => {
+        this.searchPill = pillText;
+      });
+  }
+
+  onClear() {
+    this.searchInput.patchValue('');
+    this.tasksService.retrieveAll()
+      .subscribe(value => {
+        this.searchPill = '';
+        this.searchPill = '';
+      });
+  }
+
+  searchByPastDue() {
+    this.tasksService.retrieveAllPending(moment().format('YYYY-MM-DD'))
+      .subscribe(value => {
+        this.searchPill = 'Pending';
+      });
   }
 }

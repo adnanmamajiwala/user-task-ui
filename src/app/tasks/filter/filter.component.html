@@ -3,21 +3,23 @@
     <div class="row">
       <div class="col-8">
         <input type="text" class="form-control" [formControl]="searchInput" placeholder="Search by title">
+        <span class="badge badge-pill badge-success mt-2 mr-1 p-1 pl-2 pr-2" *ngIf="!!searchPill">{{searchPill}}</span>
       </div>
       <div class="col-2">
         <div ngbDropdown class="d-inline-block">
-          <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Status</button>
+          <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Tasks</button>
           <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-            <a ngbDropdownItem (click)="searchByCompleteBy('today')">Due Today</a>
-            <a ngbDropdownItem (click)="searchByCompleteBy('tomorrow')">Due Tomorrow</a>
-            <a ngbDropdownItem (click)="searchByStatus('pending')">Over due</a>
+            <a ngbDropdownItem (click)="searchByCompleteBy('today', 'Due Today')">Due Today</a>
+            <a ngbDropdownItem (click)="searchByCompleteBy('tomorrow', 'Due Tomorrow')">Due Tomorrow</a>
+            <a ngbDropdownItem (click)="searchByPastDue()">Past due</a>
+            <a ngbDropdownItem (click)="searchByStatus('pending')">Pending</a>
             <a ngbDropdownItem (click)="searchByStatus('completed')">Completed</a>
           </div>
         </div>
       </div>
       <div class="col-2">
         <div class="d-inline-block">
-          <button class="btn btn-outline-info">Clear</button>
+          <button class="btn btn-outline-info" (click)="onClear()">Clear</button>
         </div>
       </div>
     </div>
