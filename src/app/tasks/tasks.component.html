@@ -44,10 +44,12 @@
 
           <ng-container matColumnDef="status">
             <th scope="col" *matHeaderCellDef mat-header-cell>Status</th>
-            <td (click)="flipStatus(element)" *matCellDef="let element" mat-cell matRipple>
-              <mat-icon [class]="element.status == 'pending'? 'text-warning': 'text-success'">
-                {{element.status == 'pending' ? 'hourglass_empty' : 'done'}}
-              </mat-icon>
+            <td  *matCellDef="let element" mat-cell>
+              <button (click)="flipStatus(element)"
+                      [class]="getButtonClass(element)"
+                      class="btn btn-circle btn-circle-sm m-1">
+                <i class="fa" [class]="getIconClass(element)"></i>
+              </button>
             </td>
           </ng-container>
 

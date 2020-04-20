@@ -1,5 +1,5 @@
-<div class="modal-header bg-info text-white">
-  <h3 class="modal-title" id="modal-basic-title">New Task</h3>
+<div class="modal-header text-white" [class]="isUpdate ? 'bg-warning': 'bg-info'">
+  <h3 class="modal-title" id="modal-basic-title">{{isUpdate ? 'Update Take' : 'New Task'}}</h3>
   <button type="button" class="close text-white" aria-label="Close" (click)="onClose()">
     <span aria-hidden="true">&times;</span>
   </button>

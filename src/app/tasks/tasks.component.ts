@@ -6,6 +6,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {startWith, switchMap} from 'rxjs/operators';
 import {MatTableDataSource} from '@angular/material/table';
 import {NgbModal, NgbModalConfig} from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-tasks',
@@ -22,6 +23,8 @@ export class TasksComponent implements OnInit {
   page: Page;
   isLoadingResults = false;
   task: Task;
+  private today: string;
+  private tomorrow: string;
 
   constructor(private tasksService: TasksService,
               private config: NgbModalConfig,
@@ -43,15 +46,19 @@ export class TasksComponent implements OnInit {
         }))
       .subscribe(data => {
         this.page = data.page;
+        this.isLoadingResults = false;
+        this.dataSource.data = data.content;
+        this.dataSource.paginator = this.paginator;
       });
+
     this.tasksService.tasksListSubject
       .subscribe(value => {
-        setTimeout(() => {
-          this.dataSource.data = value;
-          this.isLoadingResults = false;
-          this.cdRef.detectChanges();
-        }, 1500);
+        this.dataSource.data = value;
+        this.cdRef.detectChanges();
       });
+
+    this.today = moment(new Date()).format('YYYY-MM-DD');
+    this.tomorrow = moment(new Date()).add(1, 'day').format('YYYY-MM-DD');
   }
 
   addTask() {
@@ -65,6 +72,34 @@ export class TasksComponent implements OnInit {
   }
 
   flipStatus(element: Task) {
+    element.status = element.status === 'pending' ? 'completed' : 'pending';
+    this.tasksService.save(element)
+      .subscribe();
+  }
 
+  getButtonClass(element: Task): string {
+    if (element.status === 'completed') {
+      return 'btn-outline-success';
+    }
+    if (this.today >= element.completeBy) {
+      return 'btn-outline-danger';
+    }
+    if (this.tomorrow === element.completeBy) {
+      return 'btn-outline-warning';
+    }
+    return 'btn-outline-dark';
+  }
+
+  getIconClass(element: Task): string {
+    if (element.status === 'completed') {
+      return 'fa-check';
+    }
+    if (this.today >= element.completeBy) {
+      return 'fa-exclamation-triangle';
+    }
+    if (this.tomorrow === element.completeBy) {
+      return 'fa-hourglass-half';
+    }
+    return 'fa-ellipsis-h';
   }
 }

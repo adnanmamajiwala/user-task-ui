@@ -76,7 +76,7 @@ export class TasksService {
       .pipe(
         map(value => {
           const index = this.tasks.findIndex(val => val.id === id);
-          this.tasks.slice(index);
+          this.tasks.splice(index, 1);
           this.updateTaskSubject(this.tasks);
           return value;
         }),
