@@ -2,6 +2,10 @@ table {
   width: 100%;
 }
 
+.bg-light {
+  background-color: #ffda22 !important;
+}
+
 .loading-shade {
   position: absolute;
   top: 0;
@@ -25,10 +29,10 @@ table {
   text-align: center;
   justify-content: center;
   padding: 12px !important;
-  word-wrap: break-word !important;
+  word-wrap: initial !important;
   white-space: unset !important;
   overflow-wrap: break-word;
-  word-break: break-word;
+  word-break: keep-all;
 
   -ms-hyphens: auto;
   -moz-hyphens: auto;
@@ -42,16 +46,16 @@ table {
 }
 
 .mat-column-status {
-  flex: 0 0 15% !important;
-  width: 15% !important;
+  flex: 0 0 10% !important;
+  width: 10% !important;
 }
 
 .mat-column-title {
   flex: 0 0 65% !important;
-  width: 75% !important;
+  width: 65% !important;
 }
 
 .mat-column-completeBy {
-  flex: 0 0 15% !important;
-  width: 15% !important;
+  flex: 0 0 20% !important;
+  width: 20% !important;
 }

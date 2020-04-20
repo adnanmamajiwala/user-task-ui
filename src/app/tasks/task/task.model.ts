@@ -3,7 +3,7 @@ export class Task {
   title: string;
   description: string;
   status: string;
-  createdOn: Date;
-  completeBy: Date;
+  createdOn: string;
+  completeBy: string;
 }
 

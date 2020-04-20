@@ -1,16 +1,21 @@
 <div class="col-12 pl-0 pr-0 mt-5">
   <div class="card">
-    <div class="card-header bg-secondary">
+    <div class="card-header bg-primary">
       <div class="row">
         <div class="col-6">
           <h3 class="card-title text-white">My Tasks</h3>
         </div>
         <div class="col-6">
-          <div class="float-right">
+          <div class="float-right btn-group">
             <button type="button"
                     class="btn btn-outline-light d-flex justify-content-center align-content-between"
-                    (click)="addTask(content)" matRipple>
-              <i class="material-icons mr-1">playlist_add</i><span>New Task</span>
+                    (click)="addTask()" matRipple>
+              <i class="fas fa-filter"></i>
+            </button>
+            <button type="button"
+                    class="btn btn-outline-light d-flex justify-content-center align-content-between"
+                    (click)="addTask()" matRipple>
+              <i class="fas fa-calendar-plus"></i>
             </button>
           </div>
         </div>
@@ -29,12 +34,12 @@
 
           <ng-container matColumnDef="id">
             <th *matHeaderCellDef mat-header-cell>Id</th>
-            <td *matCellDef="let element" mat-cell>{{element.id}}</td>
+            <td (click)="showTask(element)" *matCellDef="let element" mat-cell>{{element.id}}</td>
           </ng-container>
 
           <ng-container matColumnDef="completeBy">
             <th scope="col" *matHeaderCellDef mat-header-cell>Due By</th>
-            <td *matCellDef="let element" mat-cell>{{element.completeBy | date}}</td>
+            <td (click)="showTask(element)" *matCellDef="let element" mat-cell>{{element.completeBy | date}}</td>
           </ng-container>
 
           <ng-container matColumnDef="status">
@@ -59,6 +64,6 @@
   </div>
 </div>
 
-<ng-template #content let-c="close" let-d="dismiss">
-  <app-task (exit)="c()"></app-task>
+<ng-template #content let-close="close">
+  <app-task [task]="task" (exit)="close()"></app-task>
 </ng-template>

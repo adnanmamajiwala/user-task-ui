@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {TasksService} from './tasks.service';
 import {Page, Pageable} from '../shared/pageable.model';
 import {Task} from './task/task.model';
@@ -15,9 +15,10 @@ import {NgbModal, NgbModalConfig} from '@ng-bootstrap/ng-bootstrap';
 export class TasksComponent implements OnInit {
 
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild('content', {static: true}) content: ElementRef;
 
   dataSource = new MatTableDataSource<Task>();
-  displayedColumns: Array<string> = ['id', 'completeBy', 'status', 'title'];
+  displayedColumns: Array<string> = ['id', 'status', 'completeBy', 'title'];
   page: Page;
   isLoadingResults = false;
   task: Task;
@@ -31,7 +32,6 @@ export class TasksComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.paginator.pageIndex = 0;
     this.paginator.pageSize = 5;
     this.paginator.page
@@ -42,23 +42,26 @@ export class TasksComponent implements OnInit {
           return this.tasksService.retrieveAll(this.paginator.pageIndex, this.paginator.pageSize);
         }))
       .subscribe(data => {
+        this.page = data.page;
+      });
+    this.tasksService.tasksListSubject
+      .subscribe(value => {
         setTimeout(() => {
-          this.dataSource.data = data.content;
-          this.page = data.page;
+          this.dataSource.data = value;
           this.isLoadingResults = false;
           this.cdRef.detectChanges();
         }, 1500);
       });
-
   }
 
-  addTask(content) {
-    // TODO: Add task code
-    this.modalService.open(content);
+  addTask() {
+    this.task = new Task();
+    this.modalService.open(this.content);
   }
 
   showTask(element: Task) {
-    // TODO:: Show task modal
+    this.task = element;
+    this.modalService.open(this.content);
   }
 
   flipStatus(element: Task) {

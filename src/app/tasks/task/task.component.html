@@ -1,12 +1,40 @@
-<div class="modal-header">
-  <h4 class="modal-title" id="modal-basic-title">Hi there!</h4>
-  <button type="button" class="close" aria-label="Close" (click)="onClose('Cross click')">
+<div class="modal-header bg-info text-white">
+  <h3 class="modal-title" id="modal-basic-title">New Task</h3>
+  <button type="button" class="close text-white" aria-label="Close" (click)="onClose()">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
 <div class="modal-body">
-  <p>Hello, World!</p>
+  <div class="col-10 offset-1">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input type="text" class="form-control" id="title" placeholder="My new task"
+             [(ngModel)]="title">
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea class="form-control" id="description" rows="3" placeholder="Details of my task"
+                [(ngModel)]="description"></textarea>
+    </div>
+    <div class="form-group">
+      <label for="dueBy">Due By</label>
+      <div class="input-group">
+        <input class="form-control" placeholder="yyyy-mm-dd" id="dueBy"
+               name="dp" [(ngModel)]="ngbDate" ngbDatepicker #d="ngbDatepicker">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+            <i class="fas fa-calendar-day"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-outline-dark" (click)="onSave('Save click')">Save</button>
+<div class="modal-footer" ngbAutofocus>
+  <button *ngIf="isUpdate" class="btn btn-danger" (click)="onDelete()" type="button">
+    <i class="fas fa-trash-alt"></i>
+  </button>
+  <button class="btn btn-success" (click)="onSave()" type="button">
+    <i class="fas fa-save"></i>
+  </button>
 </div>
