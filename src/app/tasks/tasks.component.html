@@ -1,4 +1,4 @@
-<div class="col-12 pl-0 pr-0 mt-5">
+<div class="col-12 pl-0 pr-0 mt-4 mb-4">
   <div class="card">
     <div class="card-header bg-primary">
       <div class="row">
@@ -39,12 +39,12 @@
           </ng-container>
 
           <ng-container matColumnDef="completeBy">
-            <th scope="col" *matHeaderCellDef mat-header-cell>Due By</th>
+            <th *matHeaderCellDef mat-header-cell>Due By</th>
             <td (click)="showTask(element)" *matCellDef="let element" mat-cell>{{element.completeBy | date}}</td>
           </ng-container>
 
           <ng-container matColumnDef="status">
-            <th scope="col" *matHeaderCellDef mat-header-cell>Status</th>
+            <th class="p-12" *matHeaderCellDef mat-header-cell>Status</th>
             <td  *matCellDef="let element" mat-cell>
               <button (click)="flipStatus(element)"
                       [class]="getButtonClass(element)"
@@ -55,7 +55,7 @@
           </ng-container>
 
           <ng-container matColumnDef="title">
-            <th class="text-center" scope="col" *matHeaderCellDef mat-header-cell>Title</th>
+            <th *matHeaderCellDef mat-header-cell>Title</th>
             <td (click)="showTask(element)" *matCellDef="let element" mat-cell matRipple>{{element.title}}</td>
           </ng-container>
 

@@ -18,7 +18,7 @@ export class TasksComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild('content', {static: true}) content: ElementRef;
 
-  isCollapsed = false;
+  isCollapsed = true;
   dataSource = new MatTableDataSource<Task>();
   displayedColumns: Array<string> = ['id', 'status', 'completeBy', 'title'];
   page: Page;
