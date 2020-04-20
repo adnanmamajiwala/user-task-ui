@@ -82,4 +82,40 @@ export class TasksService {
         }),
         catchError(err => this.handleError(err, 'delete')));
   }
+
+  retrieveByStatus(status: string): Observable<Pageable<Task>> {
+    return this.httpClient
+      .get<Pageable<Task>>(`${environment.api_base_url}/task/search/statusEquals?status=${status}`)
+      .pipe(
+        map(value => {
+          this.updateTaskSubject(value.content);
+          return value;
+        }),
+        catchError(err => this.handleError(err, 'retrieveByStatus'))
+      );
+  }
+
+  retrieveByStatusAndCompleteBy(status: string, date: string): Observable<Pageable<Task>> {
+    return this.httpClient
+      .get<Pageable<Task>>(`${environment.api_base_url}/task/search/statusAndCompleteByEquals?completeBy=${date}&status=${status}`)
+      .pipe(
+        map(value => {
+          this.updateTaskSubject(value.content);
+          return value;
+        }),
+        catchError(err => this.handleError(err, 'retrieveByStatusAndCompleteBy'))
+      );
+  }
+
+  retrieveByTitle(data: string): Observable<Pageable<Task>> {
+    return this.httpClient
+      .get<Pageable<Task>>(`${environment.api_base_url}/task/search/titleContains?title=${encodeURI(data)}`)
+      .pipe(
+        map(value => {
+          this.updateTaskSubject(value.content);
+          return value;
+        }),
+        catchError(err => this.handleError(err, 'retrieveByStatusAndCompleteBy'))
+      );
+  }
 }

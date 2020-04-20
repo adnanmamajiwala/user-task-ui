@@ -21,12 +21,14 @@ import {MatListModule} from '@angular/material/list';
 import {CustomErrorStateMatcher} from './shared/custom-error-state-matcher';
 import {MatIconModule} from '@angular/material/icon';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { FilterComponent } from './tasks/filter/filter.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TasksComponent,
-    TaskComponent
+    TaskComponent,
+    FilterComponent
   ],
   imports: [
     BrowserModule,

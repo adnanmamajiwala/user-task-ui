@@ -7,9 +7,9 @@
         </div>
         <div class="col-6">
           <div class="float-right btn-group">
-            <button type="button"
-                    class="btn btn-outline-light d-flex justify-content-center align-content-between"
-                    (click)="addTask()" matRipple>
+            <button type="button" (click)="isCollapsed = !isCollapsed"
+                    [attr.aria-expanded]="!isCollapsed" aria-controls="collapseFilter"
+                    class="btn btn-outline-light d-flex justify-content-center align-content-between" matRipple>
               <i class="fas fa-filter"></i>
             </button>
             <button type="button"
@@ -22,12 +22,13 @@
       </div>
     </div>
     <div class="card-body table-responsive mb-4 mat-paginator">
+      <app-filter id="collapseFilter" [ngbCollapse]="isCollapsed"></app-filter>
       <div class="mat-elevation-z8">
         <div *ngIf="isLoadingResults" class="loading-shade">
           <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
         </div>
         <mat-paginator [length]="page?.totalElements"
-                       [pageSizeOptions]="[5, 10, 20]"
+                       [pageSizeOptions]="[20, 50, 100]"
                        showFirstLastButtons></mat-paginator>
         <table [dataSource]="dataSource"
                class="table table-hover" mat-table>

@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {TasksService} from './tasks.service';
-import {Page, Pageable} from '../shared/pageable.model';
+import {Page} from '../shared/pageable.model';
 import {Task} from './task/task.model';
 import {MatPaginator} from '@angular/material/paginator';
 import {startWith, switchMap} from 'rxjs/operators';
@@ -18,6 +18,7 @@ export class TasksComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild('content', {static: true}) content: ElementRef;
 
+  isCollapsed = false;
   dataSource = new MatTableDataSource<Task>();
   displayedColumns: Array<string> = ['id', 'status', 'completeBy', 'title'];
   page: Page;
@@ -36,7 +37,7 @@ export class TasksComponent implements OnInit {
 
   ngOnInit() {
     this.paginator.pageIndex = 0;
-    this.paginator.pageSize = 5;
+    this.paginator.pageSize = 20;
     this.paginator.page
       .pipe(
         startWith({}),
@@ -79,26 +80,28 @@ export class TasksComponent implements OnInit {
 
   getButtonClass(element: Task): string {
     if (element.status === 'completed') {
-      return 'btn-outline-success';
+      return 'btn-success';
     }
-    if (this.today >= element.completeBy) {
-      return 'btn-outline-danger';
+    if (this.today > element.completeBy) {
+      return 'btn-danger';
+    } else if (this.today === element.completeBy) {
+      return 'btn-warning';
+    } else if (this.tomorrow === element.completeBy) {
+      return 'btn-info';
     }
-    if (this.tomorrow === element.completeBy) {
-      return 'btn-outline-warning';
-    }
-    return 'btn-outline-dark';
+    return 'btn-outline-info';
   }
 
   getIconClass(element: Task): string {
     if (element.status === 'completed') {
       return 'fa-check';
     }
-    if (this.today >= element.completeBy) {
+    if (this.today > element.completeBy) {
       return 'fa-exclamation-triangle';
-    }
-    if (this.tomorrow === element.completeBy) {
-      return 'fa-hourglass-half';
+    }else if (this.today === element.completeBy) {
+      return 'fa-exclamation';
+    } else if (this.tomorrow === element.completeBy) {
+      return 'fa-clock';
     }
     return 'fa-ellipsis-h';
   }
