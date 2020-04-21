@@ -54,7 +54,6 @@ export class FilterComponent implements OnInit {
     this.tasksService.retrieveAll()
       .subscribe(value => {
         this.searchPill = '';
-        this.searchPill = '';
       });
   }
 

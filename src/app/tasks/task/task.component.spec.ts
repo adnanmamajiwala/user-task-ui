@@ -13,12 +13,16 @@ describe('TaskComponent', () => {
   let mockTasksService;
   let task;
   let ngbDate;
+  let mockExitEmitter;
 
   beforeEach(async(() => {
     task = new Task();
     mockTasksService = {
       save: jest.fn(() => of()),
       delete: jest.fn(() => of())
+    };
+    mockExitEmitter = {
+      emit: jest.fn()
     };
 
     TestBed.configureTestingModule({
@@ -34,6 +38,8 @@ describe('TaskComponent', () => {
     });
     fixture = TestBed.createComponent(TaskComponent);
     component = fixture.componentInstance;
+    // fixture.detectChanges();
+    component.exit = mockExitEmitter;
     component.task = task;
     const date = new Date();
     ngbDate = new NgbDate(date.getFullYear(), date.getMonth(), date.getDate());
@@ -42,6 +48,21 @@ describe('TaskComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+    expect(component.ngbDate).toBe(ngbDate);
+  });
+
+  describe('on ngOnInit', () => {
+    it('should create new task', () => {
+      component.ngOnInit();
+      expect(component.task.status).toBe('pending');
+      expect(component.isUpdate).toBe(false);
+    });
+
+  });
+
+  it('on close', () => {
+    component.onClose();
+    expect(mockExitEmitter.emit).toHaveBeenCalledWith(true);
   });
 
   it('on save calls mock tasks service save operation', () => {

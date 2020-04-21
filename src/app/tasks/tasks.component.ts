@@ -24,8 +24,8 @@ export class TasksComponent implements OnInit {
   page: Page;
   isLoadingResults = false;
   task: Task;
-  private today: string;
-  private tomorrow: string;
+  today: string;
+  tomorrow: string;
 
   constructor(private tasksService: TasksService,
               private config: NgbModalConfig,
@@ -94,7 +94,6 @@ export class TasksComponent implements OnInit {
 
   getIconClass(element: Task): string {
     if (!element.id) {
-      console.log('inside empty', element);
       return '';
     } else if (element.status === 'completed') {
       return 'fa-check-circle';
