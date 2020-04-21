@@ -1,15 +1,13 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NgbDate} from '@ng-bootstrap/ng-bootstrap';
 import {Task} from './task.model';
-import {DatePipe} from '@angular/common';
 import {TasksService} from '../tasks.service';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
   selector: 'app-task',
   templateUrl: './task.component.html',
   styleUrls: ['./task.component.css'],
-  providers: [DatePipe]
 })
 export class TaskComponent implements OnInit {
 
@@ -20,15 +18,14 @@ export class TaskComponent implements OnInit {
   description = '';
   isUpdate = true;
 
-  constructor(private datePipe: DatePipe,
-              private tasksService: TasksService) {
+  constructor(private tasksService: TasksService) {
   }
 
   ngOnInit(): void {
     if (!this.task.status) {
       this.task = new Task();
       this.task.status = 'pending';
-      this.task.createdOn = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+      this.task.createdOn = moment(new Date()).format( 'yyyy-MM-dd');
       this.isUpdate = false;
     }
 

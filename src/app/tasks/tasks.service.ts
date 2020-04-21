@@ -13,7 +13,7 @@ export class TasksService {
   private tasksSubject: Subject<Array<Task>> = new Subject<Array<Task>>();
   private pageIndex: number;
   private pageSize: number;
-  private tasks: Array<Task>;
+  private tasks: Array<Task> = [];
 
   constructor(private httpClient: HttpClient) {
   }

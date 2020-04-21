@@ -6,7 +6,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {startWith, switchMap} from 'rxjs/operators';
 import {MatTableDataSource} from '@angular/material/table';
 import {NgbModal, NgbModalConfig} from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment';
+import moment from 'moment';
 
 @Component({
   selector: 'app-tasks',

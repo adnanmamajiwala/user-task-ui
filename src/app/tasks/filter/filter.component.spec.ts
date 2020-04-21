@@ -1,25 +1,47 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { FilterComponent } from './filter.component';
+import {FilterComponent} from './filter.component';
+import {TasksService} from '../tasks.service';
+import {ReactiveFormsModule} from '@angular/forms';
+import {of} from 'rxjs';
 
 describe('FilterComponent', () => {
   let component: FilterComponent;
   let fixture: ComponentFixture<FilterComponent>;
+  let tasksServiceStubSpy;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ FilterComponent ]
-    })
-    .compileComponents();
-  }));
+    const tasksServiceStub = {
+      retrieveByStatus: () => ({subscribe: () => ({})}),
+    };
 
-  beforeEach(() => {
+    tasksServiceStubSpy = spyOn(tasksServiceStub, 'retrieveByStatus');
+
+    TestBed.configureTestingModule({
+      declarations: [FilterComponent],
+      imports: [
+        ReactiveFormsModule
+      ],
+      providers: [
+        {provide: TasksService, useValue: tasksServiceStub}
+      ]
+    });
     fixture = TestBed.createComponent(FilterComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('when calling search by status', () => {
+    it('calls tasks service', () => {
+      tasksServiceStubSpy.and.returnValue(of());
+      component.searchByStatus('pending');
+      expect(tasksServiceStubSpy).toHaveBeenCalled();
+    });
+  });
+
+
 });
+
