@@ -1,4 +1,4 @@
 export const environment = {
-  api_base_url: 'http://localhost:9080/api',
+  api_base_url: 'https://user-task-svc.herokuapp.com/api',
   production: true
 };

@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  api_base_url: 'http://localhost:8080/api',
+  // api_base_url: 'http://localhost:8080/api',
+  api_base_url: 'https://user-task-svc.herokuapp.com/api',
   production: false
 };
 

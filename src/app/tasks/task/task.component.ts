@@ -25,7 +25,7 @@ export class TaskComponent implements OnInit {
     if (!this.task.status) {
       this.task = new Task();
       this.task.status = 'pending';
-      this.task.createdOn = moment(new Date()).format( 'yyyy-MM-dd');
+      this.task.createdOn = moment(new Date()).format( 'YYYY-MM-DD');
       this.isUpdate = false;
     }
 
